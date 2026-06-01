@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Beyond The Sea</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Orbitron', sans-serif;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(to bottom, #00111f, #00334e, #006994);
+    position:relative;
+}
+
+/* fondo */
+body::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:radial-gradient(circle at top, rgba(0,255,255,0.15), transparent 60%);
+    z-index:0;
+}
+
+/* burbujas */
+.bubble{
+    position:absolute;
+    bottom:-100px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    animation:subir linear infinite;
+}
+
+.bubble:nth-child(1){
+    left:10%;
+    width:20px;
+    height:20px;
+    animation-duration:9s;
+}
+
+.bubble:nth-child(2){
+    left:25%;
+    width:35px;
+    height:35px;
+    animation-duration:12s;
+}
+
+.bubble:nth-child(3){
+    left:40%;
+    width:18px;
+    height:18px;
+    animation-duration:8s;
+}
+
+.bubble:nth-child(4){
+    left:55%;
+    width:28px;
+    height:28px;
+    animation-duration:11s;
+}
+
+.bubble:nth-child(5){
+    left:75%;
+    width:22px;
+    height:22px;
+    animation-duration:10s;
+}
+
+.bubble:nth-child(6){
+    left:90%;
+    width:40px;
+    height:40px;
+    animation-duration:14s;
+}
+
+@keyframes subir{
+
+    0%{
+        transform:translateY(0);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:translateY(-110vh);
+        opacity:0;
+    }
+}
+
+/* contenedor */
+.container{
+    position:relative;
+    z-index:2;
+    width:90%;
+    max-width:750px;
+    background:rgba(0,0,0,0.35);
+    border:2px solid rgba(0,255,255,0.35);
+    box-shadow:0 0 25px rgba(0,255,255,0.25);
+    backdrop-filter:blur(10px);
+    border-radius:25px;
+    padding:35px;
+    text-align:center;
+    color:white;
+}
+
+/* titulo */
+h1{
+    font-size:48px;
+    color:#00ffff;
+    text-shadow:0 0 10px #00ffff, 0 0 20px #00ffff;
+    margin-bottom:18px;
+}
+
+p{
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+/* botones */
+button{
+    font-family:'Orbitron', sans-serif;
+    padding:14px 28px;
+    margin:10px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.08);
+}
+
+/* boton instrucciones */
+#btnInfo{
+    background:#00e5ff;
+    color:#00111f;
+    box-shadow:0 0 15px #00e5ff;
+}
+
+/* niveles */
+.level-btn{
+    background:#021b35;
+    color:white;
+    border:2px solid #00ffff;
+    box-shadow:0 0 15px rgba(0,255,255,0.3);
+}
+
+.level-btn:hover{
+    background:#00ffff;
+    color:#00111f;
+}
+
+/* jugar */
+#btnPlay{
+    background:#ffd600;
+    color:#000;
+    font-weight:bold;
+    box-shadow:0 0 15px #ffd600;
+    display:none;
+}
+
+#btnPlay:hover{
+    box-shadow:0 0 25px #ffd600;
+}
+
+/* instrucciones */
+#info{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.08);
+    text-align:left;
+}
+
+/* personajes */
+#personajes{
+    display:none;
+    margin-top:30px;
+}
+
+/* cards */
+.cards{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+/* card */
+.card{
+    position:relative;
+    width:230px;
+    height:300px;
+    border-radius:20px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:0.4s;
+    border:3px solid transparent;
+    box-shadow:0 0 20px rgba(0,255,255,0.2);
+}
+
+/* imagen */
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.5s;
+}
+
+/* overlay */
+.overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    transition:0.4s;
+}
+
+.overlay h2{
+    color:#00ffff;
+    font-size:24px;
+    text-shadow:0 0 10px #00ffff;
+}
+
+/* hover */
+.card:hover{
+    transform:scale(1.07);
+    box-shadow:0 0 30px rgba(0,255,255,0.6);
+}
+
+.card:hover img{
+    transform:scale(1.12);
+}
+
+.card:hover .overlay{
+    opacity:1;
+}
+
+/* seleccionado */
+.card.active{
+    border:3px solid #ffd600;
+    box-shadow:0 0 25px #ffd600;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- burbujas -->
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+
+<div class="container">
+
+<h1>BEYOND THE SEA</h1>
+
+<p>
+El submarino y el barco competirán en el océano para recolectar la mayor cantidad de lingotes antes de que el tiempo termine.
+</p>
+
+<button id="btnInfo" onclick="mostrarInfo()">
+INSTRUCCIONES
+</button>
+
+<!-- instrucciones -->
+<div id="info">
+
+<p>🔹 Submarino: W A S D</p>
+<p>🔹 Barco: Flechas del teclado</p>
+<p>🔹 Recolecta lingotes para sumar puntos</p>
+<p>🔹 Evita cajas y obstáculos</p>
+<p>🔹 Gana quien tenga más puntos</p>
+<p>🔹 Puedes mover la cámara con click izquierdo y mouse</p>
+
+</div>
+
+<br><br>
+
+<h3>SELECCIONA NIVEL</h3>
+
+<button class="level-btn" onclick="seleccionarNivel(1)">
+NIVEL 1
+</button>
+
+<button class="level-btn" onclick="seleccionarNivel(2)">
+NIVEL 2
+</button>
+
+<!-- personajes -->
+<div id="personajes">
+
+<h3>ELIGE TU PERSONAJE</h3>
+
+<div class="cards">
+
+    <!-- barco -->
+    <div class="card" onclick="seleccionarPersonaje('barco', this)">
+
+        <img src="./assets/barco.png" alt="Barco">
+
+        <div class="overlay">
+            <h2>🚢 BARCO</h2>
+        </div>
+
+    </div>
+
+    <!-- submarino -->
+    <div class="card" onclick="seleccionarPersonaje('submarino', this)">
+
+        <img src="./assets/submarino.png" alt="Submarino">
+
+        <div class="overlay">
+            <h2>🚤 SUBMARINO</h2>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<br>
+
+<button id="btnPlay" onclick="jugar()">
+JUGAR
+</button>
+
+</div>
+
+<script>
+
+let nivelSeleccionado = "";
+let personajeSeleccionado = "";
+
+/* mostrar instrucciones */
+function mostrarInfo(){
+
+    let info = document.getElementById("info");
+
+    if(info.style.display == "block"){
+        info.style.display = "none";
+    }
+    else{
+        info.style.display = "block";
+    }
+}
+
+/* para seleccionar nivel*/
+function seleccionarNivel(nivel){
+
+    nivelSeleccionado = nivel;
+
+    document.getElementById("personajes").style.display = "block";
+}
+
+/* eleir personaje */
+function seleccionarPersonaje(personaje, elemento){
+
+    personajeSeleccionado = personaje;
+
+    document.getElementById("btnPlay").style.display = "inline-block";
+
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+        card.classList.remove("active");
+    });
+
+    elemento.classList.add("active");
+}
+
+/* jugar */
+function jugar(){
+
+    if(nivelSeleccionado == 1){
+
+        window.location.href = "principal.html";
+    }
+
+    else if(nivelSeleccionado == 2){
+
+        window.location.href = "principal.html";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
